@@ -29,7 +29,13 @@ export default {
     },
     methods:{
         doLogin(){
-            this.$router.push('/home')
+            this.$http.get('http://localhost:8080/static/jsondata/login.json').then((res=>{
+                if(res.data.status==='0'){
+                    this.$router.push('/home')
+                }
+            })).catch((error)=>{
+                console.log(error);
+            })
         },
         doReset(){
             this.formData.username='';
