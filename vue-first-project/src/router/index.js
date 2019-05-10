@@ -5,11 +5,16 @@ import index from '@/components/index'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-        path: '/',
-        name: 'index',
-        component: index
-      }
-  ]
+  mode: 'history',
+  routes: [{
+    path: '/',
+    name: 'index',
+    component: index,
+    redirect: '/index'
+  },
+  {
+    path: '/index',
+    name: 'index',
+    component: index
+  }]
 })

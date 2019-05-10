@@ -1,18 +1,19 @@
 <template>
-    <div>
-        <h1>我的首页</h1>
-    </div>
+  <div id="app">
+    <div class="">登录</div>
+  </div>
 </template>
 
 <script>
-export default {
-    
-}
+
+export default {};
 </script>
 
 
-<style scoped>
+<style lang="less" scoped>
+
 
 </style>
+
 
 
