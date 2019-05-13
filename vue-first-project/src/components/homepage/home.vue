@@ -1,65 +1,105 @@
 <template>
   <div id="homepage">
-    <!-- <div class="banner">我的第一个vue项目</div>
-        <div class="contentArae">
-            <div class="aside"></div>
-            <div class="content"></div>
-        </div> -->
     <el-container class="contentainer">
-      <el-header>我的第一个vue项目</el-header>
       <el-container>
-        <el-aside width="200px">
-          <el-menu default-active="1">
-            <el-submenu index='1'>
+        <el-aside width="220px">
+          <div class="user-message">
+            用户信息
+          </div>
+          <el-menu
+            :default-active="activeRoute"
+            router
+            @select="selectMenu"
+          >
+            <el-submenu
+              v-for="item in menuDate"
+              :key="item.menuPath"
+              :index='item.menuPath'
+            >
               <template slot="title">
                 <i class="el-icon-menu"></i>
-                <span>我的菜单一</span>
+                <span>{{item.menuName}}</span>
               </template>
-              <el-menu-item index="1-1">我的菜单选项一</el-menu-item>
-              <el-menu-item index="1-2">我的菜单选项二</el-menu-item>
+              <template v-for="childItem in item.children">
+                <el-menu-item
+                  :index="childItem.menuPath"
+                  :key="childItem.menuPath"
+                >{{childItem.menuName}}</el-menu-item>
+              </template>
             </el-submenu>
           </el-menu>
         </el-aside>
-        <el-main class="contentArea">
-          内容区域
-        </el-main>
+        <el-container>
+          <el-header class="content-title">我的第一个vue项目</el-header>
+          <el-main class="contentArea">
+            <el-main>
+              <router-view></router-view>
+            </el-main>
+          </el-main>
+        </el-container>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      activeRoute: "",//当前激活的菜单路径
+      menuDate: []//菜单数据
+    };
+  },
+  methods: {
+    selectMenu: function(index) {
+      this.activeRoute = index;
+    },
+    geMenuData(){
+        this.$http.get('http://localhost:8080/static/jsondata/menu.json').then(res=>{
+            if(res.data.status==='0'){
+                this.menuDate=res.data.result
+            }
+        }).catch(error=>{
+            console.log(error);
+        })
+    }
+  },
+  mounted: function() {
+    this.activeRoute = this.$route.path;
+    this.geMenuData();
+  }
+};
 </script>
 
 <style lang="less" scoped>
 #homepage {
   height: 100%;
-  background: #ccc;
   .contentainer {
     height: 100%;
     .el-header {
       line-height: 60px;
-      color: #fff;
+    }
+    .user-message {
+      height: 150px;
+    }
+    .content-title {
+      border-bottom: 1px solid #ccc;
+    }
+    .contentArea {
+      padding: 0 0 16px 0;
+      box-sizing: border-box;
+    }
+    .el-aside {
+      border-right: 1px solid #ccc;
+    }
+    .el-menu {
+      text-align: left;
+      border-right: none;
+    }
+    .el-submenu .el-menu-item {
+      padding-left: 52px !important;
     }
   }
-  .contentArea {
-    padding: 16px;
-    box-sizing: border-box;
-    background: red;
-  }
-  .el-aside {
-    background: blue;
-  }
-  .el-main,
-  .el-aside {
-    height: 100%;
-  }
-}
-.banner {
-  height: 64px;
-  background: aquamarine;
-  line-height: 64px;
 }
 </style>
 

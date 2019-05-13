@@ -1,0 +1,19 @@
+{
+    "status":"0",
+    "result":[
+        {
+          "menuName": "第一个模块",
+          "menuPath": "1",
+          "children": [
+            {
+              "menuName": "菜单一",
+              "menuPath": "/child1"
+            },
+            {
+              "menuName": "菜单二",
+              "menuPath": "/child2"
+            }
+          ]
+        }
+      ]
+}
