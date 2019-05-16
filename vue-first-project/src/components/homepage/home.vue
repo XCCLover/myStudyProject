@@ -80,14 +80,27 @@ export default {
       line-height: 60px;
     }
     .user-message {
-      height: 150px;
+      height: 130px;
+      line-height: 130px;
+      background: #ccc;
     }
     .content-title {
       border-bottom: 1px solid #ccc;
+      background: linear-gradient(to right,blue,green);
+      color: #fff;
     }
     .contentArea {
       padding: 0 0 16px 0;
       box-sizing: border-box;
+      .el-main{
+          padding: 16px;
+          padding-bottom: 0;
+          box-sizing: border-box;
+          height: 100%;
+          >div{
+              height: 100%;
+          }
+      }
     }
     .el-aside {
       border-right: 1px solid #ccc;
