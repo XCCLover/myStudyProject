@@ -226,11 +226,12 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="delUserDialogVisible=false">取消</el-button>
         <el-button
           type="primary"
           @click="macksureDelUser"
+          size="small"
         >确定</el-button>
+        <el-button size="small" @click="delUserDialogVisible=false">取消</el-button>
       </span>
     </el-dialog>
   </div>
