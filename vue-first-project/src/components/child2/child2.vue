@@ -59,10 +59,12 @@
         <el-button
           size="small"
           type="primary"
+          @click="doUserEdit"
         >编辑</el-button>
         <el-button
           size="small"
           type="primary"
+          @click="doDelUser"
         >删除</el-button>
       </div>
       <el-table
@@ -73,6 +75,7 @@
         :data="tableData"
         height="calc(100% - 140px)"
         @current-change="handleCurrentChange"
+        ref="userTable"
       >
         <el-table-column
           type="index"
@@ -159,6 +162,77 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog
+      title="编辑用户"
+      :visible.sync="userEditDialogVisible"
+      width="350px"
+      class="userAddDialog"
+    >
+      <el-form :model="userEditForm">
+        <el-form-item
+          label="用户名"
+          label-width="80px"
+        >
+          <el-input v-model="userEditForm.userName"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="年龄"
+          label-width="80px"
+        >
+          <el-input v-model="userEditForm.userAge"></el-input>
+        </el-form-item>
+        <el-form-item
+          label="用户性别"
+          label-width="80px"
+        >
+          <el-select v-model="userEditForm.userGender">
+            <template v-for="(item,index) in genderList">
+              <el-option
+                :label="item.label"
+                :value="item.value"
+                :key="index"
+              ></el-option>
+            </template>
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          label="地址"
+          label-width="80px"
+        >
+          <el-input v-model="userEditForm.userAddress"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            size="small"
+            type="primary"
+            @click="makesureUserEdit"
+          >确定</el-button>
+          <el-button
+            size="small"
+            @click="userEditDialogVisible=false"
+          >取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <el-dialog
+      title="提示"
+      :visible.sync="delUserDialogVisible"
+      width="30%"
+      modal
+      class="delDialog"
+    >
+      <span>确定删除此数据？</span>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="delUserDialogVisible=false">取消</el-button>
+        <el-button
+          type="primary"
+          @click="macksureDelUser"
+        >确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -194,7 +268,17 @@ export default {
         userAge: "",
         userGender: "",
         userAddress: ""
-      }
+      },
+      selectedTableData: null,
+      userEditForm: {
+        userName: "",
+        userAge: "",
+        userGender: "",
+        userAddress: ""
+      },
+      userEditDialogVisible: false,
+      delUserId: "",
+      delUserDialogVisible:false
     };
   },
   methods: {
@@ -209,7 +293,7 @@ export default {
         });
     },
     doSearch: function() {
-      console.log(this.serchForm);
+      this.setCurrentRow();
     },
     doReset: function() {
       this.serchForm = {
@@ -218,8 +302,46 @@ export default {
         gender: ""
       };
     },
-    handleCurrentChange:function(currentRow){
-        console.log(currentRow)
+    handleCurrentChange: function(currentRow) {
+      this.selectedTableData = currentRow;
+    },
+    doUserEdit: function() {
+      if (this.selectedTableData) {
+        this.userEditDialogVisible = true;
+        this.userEditForm = {
+          userName: this.selectedTableData.name,
+          userAge: this.selectedTableData.age,
+          userGender: this.selectedTableData.gender,
+          userAddress: this.selectedTableData.address
+        };
+      } else {
+        this.$message({
+          message: "请选择一条数据之后在进行操作",
+          type: "warning"
+        });
+      }
+    },
+    setCurrentRow: function(row) {
+      this.$refs.userTable.setCurrentRow(row);
+    },
+    makesureUserEdit: function() {
+      this.userEditDialogVisible = false;
+      console.log(this.userEditForm);
+    },
+    doDelUser: function() {
+      if (this.selectedTableData) {
+        this.delUserId = this.selectedTableData.id;
+        this.delUserDialogVisible=true;
+      } else {
+        this.$message({
+          message: "请选择一条数据之后在进行操作",
+          type: "warning"
+        });
+      }
+    },
+    macksureDelUser:function(){
+        console.log(this.delUserId);
+        this.delUserDialogVisible=false
     }
   },
   mounted: function() {
@@ -251,10 +373,13 @@ export default {
     box-sizing: border-box;
   }
 }
-.userAddDialog{
-    .el-select{
-        width:100%;
-    }
+.userAddDialog {
+  .el-select {
+    width: 100%;
+  }
+}
+.delDialog{
+    text-align: left;
 }
 </style>
 
