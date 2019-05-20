@@ -101,7 +101,16 @@
         <el-table-column
           prop="address"
           label="地址"
+          min-width="180"
         ></el-table-column>
+        <el-table-column
+          label="操作"
+          fixed="right"
+          width="100">
+          <template slot-scope="scope">
+              <el-button @click="handleClick(scope.row)" type="text" size="small">详情</el-button>
+          </template>
+          </el-table-column>
       </el-table>
       <el-pagination
         background
@@ -115,6 +124,7 @@
       :visible.sync="userAddDialogVisible"
       width="350px"
       class="userAddDialog"
+      :close-on-click-modal="false"
     >
       <el-form :model="userAddForm">
         <el-form-item
@@ -167,6 +177,7 @@
       :visible.sync="userEditDialogVisible"
       width="350px"
       class="userAddDialog"
+      :close-on-click-modal="false"
     >
       <el-form :model="userEditForm">
         <el-form-item
@@ -220,6 +231,7 @@
       width="30%"
       modal
       class="delDialog"
+      :close-on-click-modal="false"
     >
       <span>确定删除此数据？</span>
       <span
@@ -343,10 +355,21 @@ export default {
     macksureDelUser:function(){
         console.log(this.delUserId);
         this.delUserDialogVisible=false
+    },
+    handleClick:function(rowData){
+        console.log(rowData);
+        this.$router.push({
+            name:'childDetail',
+            params:{
+                id:rowData.id,
+                row:rowData
+            }
+        })
     }
   },
   mounted: function() {
     this.getTableData();
+    
   }
 };
 </script>

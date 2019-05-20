@@ -33,7 +33,9 @@
           <el-header class="content-title">我的第一个vue项目</el-header>
           <el-main class="contentArea">
             <el-main>
-              <router-view></router-view>
+              <keep-alive>
+                <router-view></router-view>
+              </keep-alive>
             </el-main>
           </el-main>
         </el-container>
@@ -46,22 +48,25 @@
 export default {
   data() {
     return {
-      activeRoute: "",//当前激活的菜单路径
-      menuDate: []//菜单数据
+      activeRoute: "", //当前激活的菜单路径
+      menuDate: [] //菜单数据
     };
   },
   methods: {
     selectMenu: function(index) {
       this.activeRoute = index;
     },
-    geMenuData(){
-        this.$http.get('http://localhost:8080/static/jsondata/menu.json').then(res=>{
-            if(res.data.status==='0'){
-                this.menuDate=res.data.result
-            }
-        }).catch(error=>{
-            console.log(error);
+    geMenuData() {
+      this.$http
+        .get("http://localhost:8080/static/jsondata/menu.json")
+        .then(res => {
+          if (res.data.status === "0") {
+            this.menuDate = res.data.result;
+          }
         })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
   mounted: function() {
@@ -86,20 +91,20 @@ export default {
     }
     .content-title {
       border-bottom: 1px solid #ccc;
-      background: linear-gradient(to right,blue,green);
+      background: linear-gradient(to right, blue, green);
       color: #fff;
     }
     .contentArea {
       padding: 0 0 16px 0;
       box-sizing: border-box;
-      .el-main{
-          padding: 16px;
-          padding-bottom: 0;
-          box-sizing: border-box;
+      .el-main {
+        padding: 16px;
+        padding-bottom: 0;
+        box-sizing: border-box;
+        height: 100%;
+        > div {
           height: 100%;
-          >div{
-              height: 100%;
-          }
+        }
       }
     }
     .el-aside {
